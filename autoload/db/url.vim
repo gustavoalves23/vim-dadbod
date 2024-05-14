@@ -17,7 +17,6 @@ function! db#url#parse(url) abort
     throw 'DB: invalid URL'
   endif
   let fragment = matchstr(url, '#\zs.*')
-  let url = substitute(url, '#.*', '', '')
   let params = {}
   for item in split(matchstr(url, '?\zs.*', ''), '[&;]')
     if item =~# '^[^=]\+$' && !has_key(params, item)
@@ -203,9 +202,6 @@ function! db#url#format(url) abort
           \ 's:encode_param(v:val, a:url.params[v:val])'), '&')
   elseif has_key(a:url, 'query')
     let url .= '?' . a:url.query
-  endif
-  if has_key(a:url, 'fragment')
-    let url .= '#' . a:url.fragment
   endif
   return url
 endfunction
